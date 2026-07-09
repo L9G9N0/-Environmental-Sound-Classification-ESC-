@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Dataset and temporary outputs
+dataset/ESC-50-master/
+dataset/ESC-50-master.zip
+dataset/extracted/
+outputs/
+logs/*.log
+
+# Environments and OS
+.env
+.env.local
+.DS_Store
+.vscode/
+.idea/

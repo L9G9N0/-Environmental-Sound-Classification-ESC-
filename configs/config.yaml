@@ -1,0 +1,37 @@
+# Configuration file for ESC-50 Preprocessing and Dataset Pipeline
+
+data:
+  download_url: "https://github.com/karolpiczak/ESC-50/archive/master.zip"
+  zip_name: "ESC-50-master.zip"
+  raw_data_dir: "dataset"
+  # Paths relative to raw_data_dir after extraction
+  metadata_csv: "dataset/ESC-50-master/meta/esc50.csv"
+  audio_dir: "dataset/ESC-50-master/audio"
+
+preprocessing:
+  target_sr: 16000          # Downsample from 44.1 kHz to 16 kHz for AST inductive bias
+  duration_sec: 5.0        # ESC-50 clips are exactly 5 seconds
+  mono: true               # AST operates on single-channel audio
+  
+  # Mel Spectrogram parameters matching AST input size
+  n_mels: 128              # Number of Mel bands
+  n_fft: 400               # Window size (25ms at 16kHz)
+  hop_length: 160          # Hop size (10ms stride at 16kHz)
+  power: 2.0               # Power spectrogram (squared magnitude)
+  
+  # Normalization parameters (AudioSet population stats used by MIT/ast-finetuned-audioset-10-10-0.4593)
+  normalize: true
+  mean: -4.2677393
+  std: 4.5689974
+
+dataset:
+  # ESC-50 has 5 folds. We use 5-fold cross-validation.
+  # For a simple train/val/test run, we can assign specific folds:
+  train_folds: [1, 2, 3]   # Folds for training (1200 samples)
+  val_folds: [4]           # Fold for validation (400 samples)
+  test_folds: [5]          # Fold for testing (400 samples)
+
+dataloader:
+  batch_size: 16           # Number of clips per batch
+  num_workers: 4           # Parallel workers for data loading
+  pin_memory: true         # Speeds up tensor transfer to GPU/MPS
