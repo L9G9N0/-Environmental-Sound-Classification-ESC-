@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List
 import yaml
 
@@ -37,11 +37,34 @@ class DataloaderConfig:
     pin_memory: bool
 
 @dataclass
+class ModelConfig:
+    checkpoint_name: str
+    num_classes: int
+    freeze_encoder: bool
+    use_hf: bool
+
+@dataclass
+class TrainingConfig:
+    epochs: int
+    learning_rate: float
+    weight_decay: float
+    scheduler_type: str
+    scheduler_patience: int
+    step_size: int
+    gamma: float
+    early_stopping_patience: int
+    checkpoint_dir: str
+    log_dir: str
+    tb_dir: str
+
+@dataclass
 class PipelineConfig:
     data: DataConfig
     preprocessing: PreprocessingConfig
     dataset: DatasetConfig
     dataloader: DataloaderConfig
+    model: ModelConfig
+    training: TrainingConfig
 
     @classmethod
     def from_yaml(cls, yaml_path: str) -> "PipelineConfig":
@@ -57,12 +80,16 @@ class PipelineConfig:
             preprocessing = PreprocessingConfig(**config_dict["preprocessing"])
             dataset = DatasetConfig(**config_dict["dataset"])
             dataloader = DataloaderConfig(**config_dict["dataloader"])
+            model = ModelConfig(**config_dict["model"])
+            training = TrainingConfig(**config_dict["training"])
             
             return cls(
                 data=data,
                 preprocessing=preprocessing,
                 dataset=dataset,
-                dataloader=dataloader
+                dataloader=dataloader,
+                model=model,
+                training=training
             )
         except KeyError as e:
             raise KeyError(f"Missing required configuration key in YAML: {e}")

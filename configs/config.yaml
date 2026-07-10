@@ -35,3 +35,23 @@ dataloader:
   batch_size: 16           # Number of clips per batch
   num_workers: 4           # Parallel workers for data loading
   pin_memory: true         # Speeds up tensor transfer to GPU/MPS
+
+model:
+  checkpoint_name: "MIT/ast-finetuned-audioset-10-10-0.4593"
+  num_classes: 50
+  freeze_encoder: true       # Set to true for linear probing, false for full fine-tuning
+  use_hf: true               # If true, outputs shape [1024, 128] for AST compatibility
+
+training:
+  epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  scheduler_type: "cosine"   # options: "cosine", "step", "plateau"
+  scheduler_patience: 2      # for plateau
+  step_size: 5               # for step lr
+  gamma: 0.1                 # decay factor
+  early_stopping_patience: 3
+  checkpoint_dir: "outputs/checkpoints"
+  log_dir: "outputs/logs"
+  tb_dir: "outputs/tensorboard"
+
