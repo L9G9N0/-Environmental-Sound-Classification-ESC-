@@ -87,7 +87,7 @@ def main() -> None:
     
     # Build AST Model
     model = build_ast_model(config)
-    checkpoint = torch.load(args.checkpoint, map_location=device)
+    checkpoint = torch.load(args.checkpoint, map_location=device, weights_only=False)
     model.load_state_dict(checkpoint["model_state_dict"])
     model = model.to(device)
     model.eval()
