@@ -14,7 +14,10 @@ pip-delete-this-directory.txt
 dataset/ESC-50-master/
 dataset/ESC-50-master.zip
 dataset/extracted/
-outputs/
+outputs/*
+!outputs/checkpoints/
+outputs/checkpoints/*
+!outputs/checkpoints/best_model.pt
 logs/*.log
 
 # Environments and OS
