@@ -399,5 +399,44 @@ timeline
 ## 📌 Release & Roadmap
 
 * **v1.0.0 (Data Ingestion & DSP)**: Completed dataset download, metadata validation, resampling, log-Mel extraction, and dataloaders.
-* **v1.1.0 (Model Training & MLOps - Current)**: Completed AST head adaptation, linear probing configurations, early stopping, checkpoint resume support, TensorBoard integration, and the unit test suite.
-* **v1.2.0 (Evaluation & Inference - Future)**: Implementing final evaluation scripts on Fold 5 (test fold), generating confusion matrices, and writing a single-file CLI inference tool to predict random audio files.
+* **v1.1.0 (Model Training & MLOps)**: Completed AST head adaptation, linear probing configurations, early stopping, checkpoint resume support, TensorBoard integration, and the unit test suite.
+* **v1.2.0 (Evaluation & Inference - Current)**: Completed model evaluation on unseen test data (Fold 5), plotted a 50x50 confusion matrix, and created a command-line inference script for custom audio files.
+
+---
+
+## 📊 Model Evaluation & Inference (Member 3)
+
+The evaluation of the pre-trained Audio Spectrogram Transformer (AST) on the unseen test split (**Fold 5**) has been successfully completed. 
+
+### 1. Test Performance Metrics
+The model achieved the following results on Fold 5 (400 samples):
+* **Test Accuracy**: **78.25%**
+* **Macro Precision / Recall / F1-Score**: **0.7858 / 0.7825 / 0.7617**
+* **Weighted Precision / Recall / F1-Score**: **0.7858 / 0.7825 / 0.7617**
+* Detailed report is saved at [evaluation_metrics.json](file:///Users/legend27648/agy_project/AI%20Audio/ESC_Project/outputs/evaluation_metrics.json).
+
+### 2. Confusion Matrix Plot
+A 50x50 confusion matrix was generated to analyze class-level errors and was saved at [confusion_matrix.png](file:///Users/legend27648/agy_project/AI%20Audio/ESC_Project/outputs/confusion_matrix.png). 
+
+Key acoustic confusion pairs observed include:
+- `washing_machine` & `helicopter` predicted as `engine` (due to low-frequency periodic mechanical hums).
+- `mouse_click` predicted as `keyboard_typing` (due to high-frequency rapid click transients).
+- `wind` predicted as `train` (due to broadband pink/brown noise structures).
+
+### 3. Running Evaluation
+To execute the final evaluation pipeline and generate performance reports and plots:
+```bash
+./.venv/bin/python src/evaluate.py
+```
+
+### 4. Running Real-World Inference
+To predict the category of an arbitrary WAV audio file using the trained model and the unified DSP pipeline:
+```bash
+./.venv/bin/python src/predict.py <path_to_audio_file.wav>
+```
+Example:
+```bash
+./.venv/bin/python src/predict.py dataset/ESC-50-master/audio/1-100032-A-0.wav
+```
+For more detailed documentation, see the [Member 3: Evaluation & Inference Guide](file:///Users/legend27648/agy_project/AI%20Audio/ESC_Project/docs/MEMBER_3.md).
+
