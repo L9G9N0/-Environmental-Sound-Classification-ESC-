@@ -56,16 +56,14 @@ The trained model (`best_model.pt`) was evaluated on **Fold 5** (400 audio files
 
 Below are the calculated performance metrics:
 
-| Metric | Score | Formula / Details |
-|---|---|---|
-| **Test Loss** | **2.0682** | Cross-Entropy Loss over the test fold |
-| **Test Accuracy** | **78.25%** | $\frac{\text{Correct Predictions}}{\text{Total Predictions}}$ |
-| **Macro Precision** | **0.7858** | Unweighted average of precision across all 50 classes |
-| **Macro Recall** | **0.7825** | Unweighted average of recall across all 50 classes |
-| **Macro F1-Score** | **0.7617** | Unweighted harmonic mean of Precision and Recall |
-| **Weighted Precision** | **0.7858** | Precision averaged across classes, weighted by class support |
-| **Weighted Recall** | **0.7825** | Recall averaged across classes, weighted by class support |
-| **Weighted F1-Score** | **0.7617** | F1-Score averaged across classes, weighted by class support |
+| **Test Loss** | **1.5185** | Cross-Entropy Loss over the test fold |
+| **Test Accuracy** | **84.00%** | $\frac{\text{Correct Predictions}}{\text{Total Predictions}}$ |
+| **Macro Precision** | **0.8401** | Unweighted average of precision across all 50 classes |
+| **Macro Recall** | **0.8400** | Unweighted average of recall across all 50 classes |
+| **Macro F1-Score** | **0.8247** | Unweighted harmonic mean of Precision and Recall |
+| **Weighted Precision** | **0.8401** | Precision averaged across classes, weighted by class support |
+| **Weighted Recall** | **0.8400** | Recall averaged across classes, weighted by class support |
+| **Weighted F1-Score** | **0.8247** | F1-Score averaged across classes, weighted by class support |
 
 > [!NOTE]
 > Since the ESC-50 dataset is perfectly balanced (exactly 8 samples per class in Fold 5), the **Macro** and **Weighted** metrics are mathematically identical.
@@ -78,11 +76,11 @@ A 50x50 confusion matrix was plotted and saved to `outputs/confusion_matrix.png`
 
 Evaluating a 50-class audio classification model reveals clear patterns of acoustic similarity where the model fails to differentiate classes. The top 5 confusions observed on Fold 5 are:
 
-1. **`washing_machine` $\rightarrow$ `engine`** (Confused 4 times)
-2. **`helicopter` $\rightarrow$ `engine`** (Confused 4 times)
-3. **`mouse_click` $\rightarrow$ `keyboard_typing`** (Confused 4 times)
-4. **`wind` $\rightarrow$ `train`** (Confused 3 times)
-5. **`brushing_teeth` $\rightarrow$ `hand_saw`** (Confused 3 times)
+1. **`wind` $\rightarrow$ `train`** (Confused 4 times)
+2. **`mouse_click` $\rightarrow$ `keyboard_typing`** (Confused 4 times)
+3. **`helicopter` $\rightarrow$ `engine`** (Confused 3 times)
+4. **`washing_machine` $\rightarrow$ `vacuum_cleaner`** (Confused 3 times)
+5. **`airplane` $\rightarrow$ `helicopter`** (Confused 3 times)
 
 ### Acoustic & Engineering Explanations:
 * **Mechanical Hum Overlaps (`washing_machine` / `helicopter` $\rightarrow$ `engine`)**: Both washing machines and helicopters produce a steady, low-frequency periodic hum mixed with mechanical vibration noise. When converted to a 2D Mel-Spectrogram, these continuous, broadband signals resemble the spectral profile of general mechanical `engine` sounds.
@@ -138,14 +136,14 @@ Loading model checkpoint: outputs/checkpoints/best_model.pt
 ==================================================
 File: dataset/ESC-50-master/audio/1-100032-A-0.wav
 --------------------------------------------------
-PREDICTED CLASS: DOG (Confidence: 20.93%)
+PREDICTED CLASS: DOG (Confidence: 17.21%)
 --------------------------------------------------
 Top 5 Predictions:
-  1. dog                       : 20.93%
-  2. crickets                  : 4.87%
-  3. crow                      : 4.53%
-  4. laughing                  : 4.45%
-  5. sneezing                  : 4.29%
+  1. dog                       : 17.21%
+  2. crow                      : 9.24%
+  3. sneezing                  : 6.94%
+  4. cow                       : 5.64%
+  5. thunderstorm              : 2.45%
 ==================================================
 ```
 

@@ -410,18 +410,18 @@ The evaluation of the pre-trained Audio Spectrogram Transformer (AST) on the uns
 
 ### 1. Test Performance Metrics
 The model achieved the following results on Fold 5 (400 samples):
-* **Test Accuracy**: **78.25%**
-* **Macro Precision / Recall / F1-Score**: **0.7858 / 0.7825 / 0.7617**
-* **Weighted Precision / Recall / F1-Score**: **0.7858 / 0.7825 / 0.7617**
+* **Test Accuracy**: **84.00%**
+* **Macro Precision / Recall / F1-Score**: **0.8401 / 0.8400 / 0.8247**
+* **Weighted Precision / Recall / F1-Score**: **0.8401 / 0.8400 / 0.8247**
 * Detailed report is saved at [evaluation_metrics.json](file:///Users/legend27648/agy_project/AI%20Audio/ESC_Project/outputs/evaluation_metrics.json).
 
 ### 2. Confusion Matrix Plot
 A 50x50 confusion matrix was generated to analyze class-level errors and was saved at [confusion_matrix.png](file:///Users/legend27648/agy_project/AI%20Audio/ESC_Project/outputs/confusion_matrix.png). 
 
 Key acoustic confusion pairs observed include:
-- `washing_machine` & `helicopter` predicted as `engine` (due to low-frequency periodic mechanical hums).
-- `mouse_click` predicted as `keyboard_typing` (due to high-frequency rapid click transients).
 - `wind` predicted as `train` (due to broadband pink/brown noise structures).
+- `mouse_click` predicted as `keyboard_typing` (due to high-frequency rapid click transients).
+- `helicopter` predicted as `engine` (due to mechanical rotational noise).
 
 ### 3. Running Evaluation
 To execute the final evaluation pipeline and generate performance reports and plots:

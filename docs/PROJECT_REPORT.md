@@ -13,7 +13,7 @@ This report documents the design, implementation, and evaluation of an end-to-en
 
 To overcome these limitations, this project implements the **Audio Spectrogram Transformer (AST)**—a purely attention-based model—applied to the benchmark **ESC-50** dataset. By adopting a memory-efficient **linear probing strategy**, the massive pre-trained AST encoder weights (86.2 million parameters) are frozen, and a custom 50-class classification head is trained. The pipeline includes programmatically downloading the dataset, auditing metadata, standardized digital signal processing (resampling, mono-mixing, log-Mel spectrogram conversion), training with state-of-the-art telemetry (TensorBoard & CSV logging), and a final validation on unseen test data.
 
-On the independent, held-out test fold (Fold 5), the model achieved a **Test Accuracy of 78.25%** and a **Macro F1-Score of 0.7617**. A 50x50 confusion matrix was generated to analyze acoustic class overlaps, revealing mechanical and transient click confusions. Finally, a production-grade Command-Line Interface (CLI) tool was built to run real-world audio files through the identical DSP-model pipeline, verifying the system's deployment capability.
+On the independent, held-out test fold (Fold 5), the model achieved a **Test Accuracy of 84.00%** and a **Macro F1-Score of 0.8247**. A 50x50 confusion matrix was generated to analyze acoustic class overlaps, revealing mechanical and transient click confusions. Finally, a production-grade Command-Line Interface (CLI) tool was built to run real-world audio files through the identical DSP-model pipeline, verifying the system's deployment capability.
 
 ---
 
@@ -160,12 +160,12 @@ We implemented dual-logging telemetry:
 After training, the best checkpoint was loaded and evaluated on the completely unseen **Fold 5** (400 samples). 
 
 ### Calculated Performance Metrics:
-* **Test Loss**: **2.0682**
-* **Test Accuracy**: **78.25%**
-* **Macro Precision**: **0.7858**
-* **Macro Recall**: **0.7825**
-* **Macro F1-Score**: **0.7617**
-* **Weighted F1-Score**: **0.7617**
+* **Test Loss**: **1.5185**
+* **Test Accuracy**: **84.00%**
+* **Macro Precision**: **0.8401**
+* **Macro Recall**: **0.8400**
+* **Macro F1-Score**: **0.8247**
+* **Weighted F1-Score**: **0.8247**
 
 > [!NOTE]
 > The Macro and Weighted scores are identical because the ESC-50 dataset is perfectly balanced, allocating exactly 8 samples per class per fold (400 total samples / 50 classes = 8).
@@ -178,11 +178,11 @@ A 50x50 confusion matrix was generated to analyze class-level errors, saved as `
 
 | True Class | Predicted Class | Count | Acoustic Reason |
 | :--- | :--- | :--- | :--- |
-| **`washing_machine`** | **`engine`** | **4** | Continuous, low-frequency periodic mechanical hums. |
-| **`helicopter`** | **`engine`** | **4** | Rhythmic mechanical vibrations that mimic general combustion engine spectra. |
+| **`wind`** | **`train`** | **4** | Continuous broadband pink noise profiles overlap with far-away diesel trains. |
 | **`mouse_click`** | **`keyboard_typing`** | **4** | Short-duration, high-frequency transients (clicks) with identical decay times. |
-| **`wind`** | **`train`** | **3** | Continuous broadband pink noise profiles overlap with far-away diesel trains. |
-| **`brushing_teeth`** | **`hand_saw`** | **3** | Repetitive periodic friction scrub cycles with overlapping frequency peaks. |
+| **`helicopter`** | **`engine`** | **3** | Rhythmic mechanical vibrations that mimic general combustion engine spectra. |
+| **`washing_machine`** | **`vacuum_cleaner`** | **3** | Steady mechanical hums and continuous internal rotational noise. |
+| **`airplane`** | **`helicopter`** | **3** | Doppler-shifting broadband noise and low-frequency resonance. |
 
 ---
 
@@ -205,14 +205,14 @@ Loading model checkpoint: outputs/checkpoints/best_model.pt
 ==================================================
 File: dataset/ESC-50-master/audio/1-100032-A-0.wav
 --------------------------------------------------
-PREDICTED CLASS: DOG (Confidence: 20.93%)
+PREDICTED CLASS: DOG (Confidence: 17.21%)
 --------------------------------------------------
 Top 5 Predictions:
-  1. dog                       : 20.93%
-  2. crickets                  : 4.87%
-  3. crow                      : 4.53%
-  4. laughing                  : 4.45%
-  5. sneezing                  : 4.29%
+  1. dog                       : 17.21%
+  2. crow                      : 9.24%
+  3. sneezing                  : 6.94%
+  4. cow                       : 5.64%
+  5. thunderstorm              : 2.45%
 ==================================================
 ```
 
@@ -220,7 +220,7 @@ Top 5 Predictions:
 
 ## 💡 9. Conclusion & Future Directions
 
-This project successfully demonstrates the applicability of the Audio Spectrogram Transformer to environmental sound classification. Under a linear probing constraint (freezing 99.9% of weights), the model achieved a strong baseline of **78.25% test accuracy** on unseen data.
+This project successfully demonstrates the applicability of the Audio Spectrogram Transformer to environmental sound classification. Under a linear probing constraint (freezing 99.9% of weights), the model achieved a strong baseline of **84.00% test accuracy** on unseen data.
 
 To further improve performance:
 1. **Full Fine-Tuning**: Slowly unfreeze the transformer backbone layers using discriminative learning rates to adjust attention patterns.
