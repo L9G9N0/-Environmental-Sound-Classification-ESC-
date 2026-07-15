@@ -13,19 +13,35 @@ import argparse
 import logging
 import os
 import sys
+import warnings
+
+# Suppress noisy library output for a clean demo/CLI experience.
+# Model was already downloaded during training, so offline mode avoids
+# redundant Hugging Face Hub network calls and their log lines entirely.
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+warnings.filterwarnings("ignore")
 
 # Adjust path if running directly from src directory
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import torch
 import torch.nn.functional as F
+from transformers import logging as hf_logging
+
+hf_logging.set_verbosity_error()
 
 from src.config import PipelineConfig
 from src.model import build_ast_model
 from src.metadata import ESC50Metadata
 from src.preprocessing import AudioPreprocessor
 
-logging.basicConfig(level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+logging.getLogger("urllib3").setLevel(logging.ERROR)
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("ESC_Pipeline")
 
 
